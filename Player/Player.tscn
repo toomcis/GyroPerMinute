@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://bm3bc8vpoayih"]
+
+[ext_resource type="Script" uid="uid://bm3uqh6emy5ho" path="res://Player/trailLine.gd" id="1_3qydi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_62e2m"]
+
+[sub_resource type="Gradient" id="Gradient_xhfnw"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kpjcp"]
+gradient = SubResource("Gradient_xhfnw")
+
+[sub_resource type="Curve" id="Curve_62e2m"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Node2D" type="Node2D"]
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+scale = Vector2(20, 20)
+mesh = SubResource("SphereMesh_62e2m")
+texture = SubResource("GradientTexture1D_kpjcp")
+
+[node name="Line2D" type="Line2D" parent="MeshInstance2D"]
+top_level = true
+width_curve = SubResource("Curve_62e2m")
+default_color = Color(0, 0, 0.847059, 1)
+script = ExtResource("1_3qydi")
