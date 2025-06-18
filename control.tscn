@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://by8iuxuqcfkpq"]
+[gd_scene load_steps=3 format=3 uid="uid://by8iuxuqcfkpq"]
 
 [ext_resource type="Script" uid="uid://bvq8gcc1cuiv5" path="res://control.gd" id="1_0fbet"]
+[ext_resource type="PackedScene" uid="uid://bm3bc8vpoayih" path="res://Player.tscn" id="2_62e2m"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -13,8 +14,11 @@ script = ExtResource("1_0fbet")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+offset_right = 80.0
+offset_bottom = 40.0
+text = "-1"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Node2D" parent="." instance=ExtResource("2_62e2m")]
