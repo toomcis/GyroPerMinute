@@ -22,7 +22,7 @@ func _ready():
 
 	print("Server listening on port %d" % PORT)
 	
-	IPLabel.text = "Number of players = " + str(len(ListOfPlayers) - 1)# Add IP to connect instead of number of players
+	IPLabel.text = "IP to Join: " + str(IP.get_local_addresses()[3])# Add IP to connect instead of number of players
 
 func _process(delta):
 	pass
@@ -30,7 +30,7 @@ func _process(delta):
 func _on_peer_connected(id):
 	print("Peer connected: %s" % id)
 	ListOfPlayers.append(id)
-	var NewPlayer = load("res://Player.tscn").instantiate()
+	var NewPlayer = load("res://Player/Player.tscn").instantiate()
 	add_child(NewPlayer)
 	NewPlayer.position = get_viewport().size / 2
 
@@ -42,6 +42,7 @@ func getPlayerOffID(id):
 
 @rpc("any_peer")
 func sentPlayerColor(sentColor):
+	sentColor = Color(randf(), randf(), randf())
 	var player = getPlayerOffID(multiplayer.get_remote_sender_id())
 	player.get_child(0).texture.gradient.set_color(0, sentColor)
 	player.get_child(0).get_child(0).default_color = sentColor
