@@ -4,9 +4,14 @@ extends Control
 @onready var DPI = (get_viewport().size.x + get_viewport().size.y)
 
 const PORT = 7183
-var multiplayer_peer = ENetMultiplayerPeer.new()
-var ListOfPlayers = [0]
+var secondsPassed = 0
 var ServerStarted = false
+var multiplayer_peer = ENetMultiplayerPeer.new()
+var gameStarted = ""
+
+
+var playersInStart = [0]
+var playersInSettings = [0]
 
 func _ready():
 	
@@ -27,27 +32,29 @@ func _process(delta):
 	pass
 
 func _on_peer_connected(id):
-	var CurrentPlayerIndex = ListOfPlayers.size()
+	var CurrentPlayerIndex = Globals.ListOfPlayers.size()
 	print("Peer connected: %s" % id)
-	ListOfPlayers.append(id)
+	Globals.ListOfPlayers.append(id)
 	var NewPlayer = load("res://Player/Player.tscn").instantiate()
 	add_child(NewPlayer)
 	NewPlayer.position = get_viewport().size / 2
 	if ServerStarted:
-		MenuLabel.text = "Player " + str(CurrentPlayerIndex) + " disconnected"
+		MenuLabel.text = "Player " + str(CurrentPlayerIndex) + " connected to server!"
 	
 
 func _on_peer_disconnected(id):
 	print("Peer disconnected: %s" % id)
-	var indexOfDisconnectedPlayer = ListOfPlayers.find(id)
-	ListOfPlayers.remove_at(indexOfDisconnectedPlayer)
+	var indexOfDisconnectedPlayer = Globals.ListOfPlayers.find(id)
+	Globals.ListOfPlayers.remove_at(indexOfDisconnectedPlayer)
 	print(get_child(indexOfDisconnectedPlayer))
 	remove_child(get_child(indexOfDisconnectedPlayer))
+	Globals.ListOfPlayerColors.remove_at(indexOfDisconnectedPlayer)
 	if ServerStarted:
 		MenuLabel.text = "Player " + str(indexOfDisconnectedPlayer) + " disconnected"
+		
 
 func getPlayerOffID(id):
-	return get_child(ListOfPlayers.find(id))	
+	return get_child(Globals.ListOfPlayers.find(id))	
 
 @rpc("any_peer")
 func sentPlayerColor(sentColor):
@@ -63,7 +70,8 @@ func sentPlayerColor(sentColor):
 	line.gradient = new_gradient
 	new_gradient.set_color(0, sentColor)
 
-	print(ListOfPlayers.find(multiplayer.get_remote_sender_id()))
+	print(Globals.ListOfPlayers.find(multiplayer.get_remote_sender_id()))
+	Globals.ListOfPlayerColors.append(sentColor)
 
 @rpc("any_peer")
 func getInfo(_information):
@@ -78,7 +86,6 @@ func send_gyro(GyroData):
 	player.rotation += GyroData.y
 	if player.rotation >= 360 or player.rotation <= -360:
 		player.rotation = 0
-	print(player.rotation)
 	
 	if player.position.x >= get_viewport().size.x:
 		player.position.x = 0
@@ -107,5 +114,32 @@ func _on_resized() -> void:
 
 
 func _on_start_game_body_entered(body: Node2D) -> void:
-	print(body)
-	MenuLabel.text = "Body " + str(body) + " entered start game area!"
+	var player = get_children().find(body)
+	playersInStart.append(Globals.ListOfPlayers[player])
+	print(playersInStart)
+	MenuLabel.text = "Player " + str(player) + " entered start game area!"
+	
+	if Globals.ListOfPlayers == playersInStart and Globals.ListOfPlayers != [0]:
+		print("Starting game!")
+		MenuLabel.text = "All players in start, starting soon!"
+		secondsPassed = 0
+		$"Nodes/Start Game/CountDown".start()
+
+func gameStart(gameMode):
+	MenuLabel.text = str(gameMode) + " started!"
+	#get_tree().change_scene_to_file("")
+
+func _on_start_game_body_exited(body: Node2D) -> void:
+	var player = get_children().find(body)
+	playersInStart.erase(Globals.ListOfPlayers[player])
+	print(playersInStart)
+	MenuLabel.text = "Player " + str(player) + " exited start game area!"
+
+
+func _on_count_down_timeout() -> void:
+	secondsPassed += 1
+	MenuLabel.text = str(secondsPassed)
+	if not secondsPassed > 5:
+		$"Nodes/Start Game/CountDown".start()
+	else:
+		gameStart(gameStarted)

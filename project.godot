@@ -11,14 +11,20 @@ config_version=5
 [application]
 
 config/name="GameServer"
-run/main_scene="uid://cpah3vsg1d0io"
+run/main_scene="uid://by8iuxuqcfkpq"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+
+[autoload]
+
+Globals="*res://Globals.gd"
 
 [display]
 
 window/size/viewport_width=960
 window/size/viewport_height=540
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
 
 [rendering]
 

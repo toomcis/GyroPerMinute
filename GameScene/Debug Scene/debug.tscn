@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckmp8lcmeoagk"]
+
+[ext_resource type="Script" uid="uid://cr52bdcuvwq7e" path="res://GameScene/Debug Scene/debug_gamemode.gd" id="1_4nct5"]
+
+[node name="MainScreen" type="Node2D"]
+script = ExtResource("1_4nct5")
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="Balls" type="Node2D" parent="."]
+
+[node name="BallCooldown" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="timeout" from="BallCooldown" to="." method="_on_ball_cooldown_timeout"]

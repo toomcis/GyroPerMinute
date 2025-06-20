@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://cq12jrambim4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5b7i2"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_5b7i2"]
+
+[sub_resource type="Gradient" id="Gradient_b3koq"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.470588, 0.784314, 0.784314, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dinph"]
+resource_local_to_scene = true
+gradient = SubResource("Gradient_b3koq")
+
+[node name="1" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+scale = Vector2(3, 3)
+shape = SubResource("CircleShape2D_5b7i2")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="RigidBody2D/CollisionShape2D"]
+position = Vector2(9.53674e-07, 1.78814e-06)
+scale = Vector2(20.0227, 20)
+mesh = SubResource("SphereMesh_5b7i2")
+texture = SubResource("GradientTexture1D_dinph")

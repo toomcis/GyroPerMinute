@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://by8iuxuqcfkpq"]
+[gd_scene load_steps=8 format=3 uid="uid://by8iuxuqcfkpq"]
 
 [ext_resource type="Script" uid="uid://bvq8gcc1cuiv5" path="res://GameScene/Debug Scene/MainDebug.gd" id="1_r181u"]
 
@@ -8,7 +8,19 @@ line_spacing = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tmeyd"]
 size = Vector2(1, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tmeyd"]
+transparency = 1
+no_depth_test = true
+
 [sub_resource type="BoxMesh" id="BoxMesh_jod0l"]
+material = SubResource("StandardMaterial3D_tmeyd")
+
+[sub_resource type="Gradient" id="Gradient_o3l6n"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.552941, 0.886275, 0, 0.215686)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_d33f1"]
+gradient = SubResource("Gradient_o3l6n")
 
 [node name="MainScreen" type="Control"]
 layout_mode = 3
@@ -22,11 +34,13 @@ script = ExtResource("1_r181u")
 [node name="Nodes" type="Node2D" parent="."]
 
 [node name="Label" type="Label" parent="Nodes"]
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 111.0
-offset_bottom = 23.0
+offset_left = 434.0
+offset_top = 248.0
+offset_right = 545.0
+offset_bottom = 271.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Game Started!"
@@ -36,6 +50,8 @@ vertical_alignment = 1
 
 [node name="Start Game" type="Area2D" parent="Nodes"]
 position = Vector2(488, 151)
+collision_layer = 7
+collision_mask = 7
 
 [node name="Area" type="CollisionShape2D" parent="Nodes/Start Game"]
 position = Vector2(-1, -78)
@@ -44,6 +60,12 @@ shape = SubResource("RectangleShape2D_tmeyd")
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="Nodes/Start Game/Area"]
 mesh = SubResource("BoxMesh_jod0l")
+texture = SubResource("GradientTexture1D_d33f1")
+
+[node name="CountDown" type="Timer" parent="Nodes/Start Game"]
+one_shot = true
 
 [connection signal="resized" from="." to="." method="_on_resized"]
 [connection signal="body_entered" from="Nodes/Start Game" to="." method="_on_start_game_body_entered"]
+[connection signal="body_exited" from="Nodes/Start Game" to="." method="_on_start_game_body_exited"]
+[connection signal="timeout" from="Nodes/Start Game/CountDown" to="." method="_on_count_down_timeout"]

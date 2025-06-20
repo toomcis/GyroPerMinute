@@ -33,19 +33,17 @@ texture = SubResource("GradientTexture1D_q3lat")
 
 [node name="Line2D" type="Line2D" parent="MeshInstance2D"]
 top_level = true
-points = PackedVector2Array(2, -7)
-closed = true
 width = 40.0
 width_curve = SubResource("Curve_62e2m")
 default_color = Color(0, 1, 0, 1)
 gradient = SubResource("Gradient_q3lat")
 joint_mode = 1
-sharp_limit = 90.0
-round_precision = 32
-antialiased = true
+begin_cap_mode = 2
+end_cap_mode = 2
 script = ExtResource("1_3qydi")
 
-[node name="RigidBody2D" type="RigidBody2D" parent="MeshInstance2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="MeshInstance2D"]
+motion_mode = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeshInstance2D/RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeshInstance2D/CharacterBody2D"]
 shape = SubResource("CircleShape2D_3qydi")
